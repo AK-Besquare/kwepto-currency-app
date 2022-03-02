@@ -25,7 +25,12 @@ export const GlobalStyle = createGlobalStyle`
     ul,
     img, 
     div, 
-    nav {
+    nav, 
+    table, 
+    thead, 
+    tbody, 
+    tr, 
+    td {
         padding:0;
         margin:0;
     }
@@ -64,5 +69,10 @@ export const GlobalStyle = createGlobalStyle`
 
     li {
     list-style-type: none;
+    color: #484848;
+    }
+
+    img{
+            pointer-events:none;
     }
 `;

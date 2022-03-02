@@ -1,15 +1,22 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Routes, Route } from "react-router-dom";
+import {
+  AppStyled,
+  NavStyled,
+  BodyStyled,
+  FooterStyled,
+} from "./styles/Main.styled";
 import NavBar from "./components/NavBar";
 import PriceTracker from "./pages/PriceTracker";
 import CoinPage from "./pages/CoinPage";
 import Exchange from "./pages/Exchange";
-import { AppContainerStyled, MainContainerStyled } from "./styles/Main.styled";
 import Footer from "./components/Footer";
 
 const App = () => {
   const [coins, setCoins] = useState([]);
+  const [data, setData] = useState({});
+  const [rate, setRate] = useState([]);
   const [currency, setCurrency] = useState("myr");
   const [loading, setLoading] = useState(false);
 
@@ -27,12 +34,33 @@ const App = () => {
       .catch((error) => {
         console.log(error);
       });
+
+    axios
+      .get(`https://api.coingecko.com/api/v3/exchange_rates`)
+      .then((res) => {
+        setRate(res.data.rates);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get(`https://api.coingecko.com/api/v3/global`)
+      .then((res) => {
+        setData(res.data.data);
+        // console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [currency]);
 
   return (
-    <AppContainerStyled>
-      <NavBar />
-      <MainContainerStyled>
+    <AppStyled>
+      <NavStyled>
+        <NavBar data={data} currency={currency} />
+      </NavStyled>
+      <BodyStyled>
         <Routes>
           <Route
             path="/"
@@ -41,6 +69,7 @@ const App = () => {
                 loading={loading}
                 coins={coins}
                 currency={currency}
+                rate={rate}
                 setCurrency={setCurrency}
               />
             }
@@ -48,9 +77,11 @@ const App = () => {
           <Route path=":coinid" element={<CoinPage />} />
           <Route path="/exchange" element={<Exchange />} />
         </Routes>
-      </MainContainerStyled>
-      <Footer />
-    </AppContainerStyled>
+      </BodyStyled>
+      <FooterStyled>
+        <Footer />
+      </FooterStyled>
+    </AppStyled>
   );
 };
 
