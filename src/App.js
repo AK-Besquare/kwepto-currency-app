@@ -12,6 +12,7 @@ import PriceTracker from "./pages/PriceTracker";
 import CoinPage from "./pages/CoinPage";
 import Exchange from "./pages/Exchange";
 import Footer from "./components/Footer";
+// import Chat from "./chat_room/client/src/Home/Home";
 
 const App = () => {
   const [coins, setCoins] = useState([]);
