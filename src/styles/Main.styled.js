@@ -9,29 +9,33 @@ export const AppStyled = styled.div`
 // Base Style for NavBar
 export const NavStyled = styled.nav`
   grid-row-start: 1;
-  background-color: red;
 `;
 
 // Base style for MainSection
 export const BodyStyled = styled.div`
   grid-row-start: 2;
-  margin: 2em 0;
+  margin-inline: auto;
+  width: 100%;
 `;
 
 // Base style for Footer
 export const FooterStyled = styled.footer`
   grid-row-start: 3;
+  margin-top: 2em;
 `;
 
 // For headers and big text
 export const HeaderStyled = styled.div`
   text-align: center;
-  margin: 0.5em;
+  margin-bottom: 1.5em;
+  line-height: 1.2;
   h1 {
-    font-size: clamp(30px, 3vw, 50px);
+    font-size: clamp(35px, 5.5vw, 50px);
+    font-weight: 800;
   }
   p {
-    font-size: clamp(18px, 1.5vw, 25px);
+    font-size: clamp(18px, 2.5vw, 25px);
+    font-weight: 400;
   }
 `;
 
@@ -46,21 +50,10 @@ export const LoadingScreenStyled = styled.div`
   }
 `;
 
-// Apply card-style background with shadow
-export const CardStyled = styled.div`
-  padding: 1em;
-  border-radius: 25px;
-  border: 2.5px solid #484848;
-  width: auto;
-  background-color: #fff;
-  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
-    rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
-`;
-
 // To give center text and items within a component
 export const SectionStyled = styled.section`
   margin-inline: auto;
-  max-width: 1028px;
+  max-width: 1280px;
   margin-top: 2em;
 `;
 
@@ -68,13 +61,4 @@ export const SectionStyled = styled.section`
 export const CenterEverythingStyled = styled.div`
   display: grid;
   place-items: center;
-`;
-
-export const WhiteBgStyled = styled.div`
-  background-color: #fff;
-`;
-
-export const GreyBgStyled = styled.div`
-  background-color: #484848;
-  height: 100%;
 `;

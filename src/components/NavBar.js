@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   NavContainerStyled,
   NavLinksStyled,
@@ -6,42 +6,77 @@ import {
 } from "../styles/NavBar.styled";
 import Logo from "../assets/LogoImg.svg";
 import { Link } from "react-router-dom";
+import { GiHamburgerMenu } from "react-icons/gi";
+import FilterCoinList from "./FilterCoinList";
 
-const NavBar = ({ data, currency }) => {
+const NavBar = ({ data, currency, setCurrency }) => {
+  const [toggleMenu, setToggleMenu] = useState(false);
+
+  const toggleNav = () => {
+    setToggleMenu(!toggleMenu);
+  };
   return (
     <NavContainerStyled>
       <NavLinksStyled>
         <div className="logo">
-          <img src={Logo} alt="kwepto" />
+          <Link to="/">
+            <img src={Logo} alt="kwepto" />
+          </Link>
         </div>
         <ul className="links">
-          <Link to="/">
+          <Link to="/currencies">
             <li>Currencies</li>
           </Link>
           <Link to="/exchange">
             <li>Exchanges</li>
           </Link>
-          <li>News</li>
+          <Link to="/news">
+            <li>News</li>
+          </Link>
+          <div className="end">
+            <FilterCoinList currency={currency} setCurrency={setCurrency} />
+          </div>
         </ul>
-        <ul className="responsive">
-          <li>Currencies</li>
-          <li>Exchanges</li>
-          <li>News</li>
-        </ul>
+        <div className="responsive">
+          <button className="responsie burger">
+            <GiHamburgerMenu onClick={toggleNav} />
+          </button>
+          {toggleMenu && (
+            <ul>
+              <Link to="/">
+                <li>Currencies</li>
+              </Link>
+              <Link to="/exchange">
+                <li>Exchanges</li>
+              </Link>
+              <Link to="/news">
+                <li>News</li>
+              </Link>
+            </ul>
+          )}
+        </div>
       </NavLinksStyled>
       <CrytoMarketStyled>
         <li>
-          Cryptos : <span>{data.active_cryptocurrencies}</span>
+          <p>
+            Cryptos : <span>{data.active_cryptocurrencies}</span>
+          </p>
         </li>
         <li>
-          Markets : <span>{data.markets}</span>
+          <p>
+            Markets : <span>{data.markets}</span>
+          </p>
         </li>
         <li>
-          Market Cap: <span>$1,707,443,014,522</span>
-          {/* Market Cap: <span>{data.total_market_cap[currency]}</span> */}
+          <p>
+            Market Cap: <span>$1,707,443,014,522</span>
+            {/* Market Cap: <span>{data.total_market_cap.usd}</span> */}
+          </p>
         </li>
         <li>
-          24h Vol: <span>$83,173,623,418</span>
+          <p>
+            24h Vol: <span>$83,173,623,418</span>
+          </p>
         </li>
       </CrytoMarketStyled>
     </NavContainerStyled>

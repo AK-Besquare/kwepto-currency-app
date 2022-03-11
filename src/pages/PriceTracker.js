@@ -1,28 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  CardStyled,
   HeaderStyled,
   LoadingScreenStyled,
   SectionStyled,
 } from "../styles/Main.styled";
-import { CoinTableStyled, PageNumberStyled } from "../styles/CoinList.styled";
+import {
+  TableContainerStyled,
+  CoinTableStyled,
+} from "../styles/CoinList.styled";
 import Trending from "../components/Trending";
 import CoinList from "../components/CoinList";
-import FilterCoinList from "../components/FilterCoinList";
 import Banner from "../components/Banner";
 import { Link } from "react-router-dom";
-import { RiArrowLeftSFill, RiArrowRightSFill } from "react-icons/ri";
 
-const PriceTracker = ({ loading, coins, currency, rate, setCurrency }) => {
-  const [pageNumber, setPageNumber] = useState(0);
-  const coinsPerPage = 10;
-  const pagesVisited = pageNumber * coinsPerPage;
-  const pageCount = Math.ceil(coins.length / coinsPerPage);
-
-  const changePage = ({ selected }) => {
-    setPageNumber(selected);
-  };
-
+const PriceTracker = ({ loading, coins, formatCurrency }) => {
   if (loading) {
     return (
       <LoadingScreenStyled>
@@ -30,29 +21,19 @@ const PriceTracker = ({ loading, coins, currency, rate, setCurrency }) => {
       </LoadingScreenStyled>
     );
   }
-
   return (
     <>
       <Banner />
-      <Trending rate={rate} />
+      <Trending />
       <SectionStyled>
         <HeaderStyled>
-          <h1>CRYPTOCURRENCIES</h1>
-          <p>Today's Cryptocurrency Prices by Market Cap</p>
+          <h1>Market</h1>
         </HeaderStyled>
-        <FilterCoinList
-          rate={rate}
-          currency={currency}
-          setCurrency={setCurrency}
-        />
-        <CardStyled>
+        <TableContainerStyled>
           <CoinTableStyled>
             <thead>
               <tr>
-                <th className="rank">
-                  <strong>#</strong>
-                </th>
-                <th className="coin-name">
+                <th style={{ textAlign: "center" }}>
                   <strong>Name</strong>
                 </th>
                 <th>
@@ -61,34 +42,31 @@ const PriceTracker = ({ loading, coins, currency, rate, setCurrency }) => {
                 <th className="percentage">
                   <strong>24hr</strong>
                 </th>
-                <th className="percentage visible">
-                  <strong>7d</strong>
-                </th>
-                <th>
-                  <strong>Market Cap</strong>
+                <th className="visible">
+                  <strong>Mkt Cap</strong>
                 </th>
               </tr>
             </thead>
-            {coins
-              .slice(pagesVisited, pagesVisited + coinsPerPage)
-              .map((coin) => {
-                return (
-                  <Link to={`/${coin.id}`}>
-                    <CoinList key={coin.id} coin={coin} currency={currency} />
-                  </Link>
-                );
-              })}
+            {coins.slice(0, 8).map((coin) => {
+              return (
+                <Link to={`/${coin.id}`}>
+                  <CoinList
+                    key={coin.market_cap_rank}
+                    coin={coin}
+                    formatCurrency={formatCurrency}
+                  />
+                </Link>
+              );
+            })}
+            <tfoot>
+              <button>
+                <Link to="/currencies">
+                  <p>View More</p>
+                </Link>
+              </button>
+            </tfoot>
           </CoinTableStyled>
-        </CardStyled>
-        <SectionStyled>
-          <PageNumberStyled
-            previousLabel={<RiArrowLeftSFill />}
-            nextLabel={<RiArrowRightSFill />}
-            pageCount={pageCount}
-            onPageChange={changePage}
-            pageRangeDisplayed="10"
-          />
-        </SectionStyled>
+        </TableContainerStyled>
       </SectionStyled>
     </>
   );
