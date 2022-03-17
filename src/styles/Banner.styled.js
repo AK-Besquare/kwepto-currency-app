@@ -22,13 +22,10 @@ export const BannerContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  /* margin-bottom: 10em;
-  height: 80vh;
-  padding: 0em 25em; */
   height: 80vh;
 
   .banner-img {
-    width: clamp(250px, 18vw, 20vw);
+    width: clamp(250px, 25vw, 25vw);
 
     img {
       height: 100%;
@@ -53,10 +50,8 @@ export const BannerContainer = styled.div`
     }
   }
 
-  .home-btn {
+  .home_btn {
     padding: 2em 0em;
-    animation: bounceIn;
-    animation-duration: 2s;
   }
 
   @media (max-width: 800px) {
@@ -76,6 +71,8 @@ export const Button = styled.button`
   padding: ${({ big }) => (big ? "14px 48px" : "12px 30px")};
   color: #fff;
   font-size: 20px;
+  margin-top: 20px;
+
   transition: all 0.2s ease-in-out;
 
   p {
