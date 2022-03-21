@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import {
   CoinInfoDataStyled,
@@ -25,7 +25,7 @@ import MarketList from "../components/MarketList";
 import { CardStyled, MarketHeaderStyled } from "../styles/MarketList.styled";
 import { SectionStyled } from "../styles/Main.styled";
 
-const CoinPage = () => {
+const CoinPage = ({ currency }) => {
   const [coin, setCoin] = useState({});
   const [historicalData, setHistoricalData] = useState([]);
   const [days, setDays] = useState(1);
@@ -34,6 +34,13 @@ const CoinPage = () => {
   const [usdValue, setUsdValue] = useState(
     coin.market_data?.current_price.usd.toLocaleString()
   );
+
+  // const navigate = useNavigate();
+
+  const backBtn = () => {
+    // navigate("/currencies");
+    window.history.go(-1);
+  };
 
   useEffect(() => {
     axios
@@ -81,10 +88,50 @@ const CoinPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    let ws = new WebSocket(
+      `wss://stream.binance.com:9443/ws/${coin?.symbol}usdt@trade`
+    );
+    console.log(ws);
+    let stockPriceElement = document.getElementById("price");
+    let lastPrice = null;
+
+    ws.onopen = () => {
+      console.log("Connection Started");
+    };
+
+    ws.onmessage = (event) => {
+      let stockObject = JSON.parse(event.data);
+      console.log(stockObject);
+
+      let price = parseFloat(stockObject.p);
+      stockPriceElement.innerText =
+        price > 0
+          ? price
+          : coin.market_data?.current_price.usd.toLocaleString();
+      stockPriceElement.style.color =
+        !lastPrice || lastPrice === price
+          ? "#484848"
+          : price > lastPrice
+          ? "green"
+          : "red";
+      lastPrice = price;
+    };
+
+    return () => {
+      ws.close();
+      console.log("Connection Closed");
+    };
+  }, [coin.symbol]);
+
   return (
     <>
       <SectionStyled>
         <CoinContainerStyled>
+          <div className="backBtn">
+            <button onClick={backBtn}>Back</button>
+          </div>
+
           <CoinInfoDataStyled>
             {/* Left */}
             <div className="coin-info-card">
@@ -100,7 +147,7 @@ const CoinPage = () => {
                 </div>
 
                 <div className="coin-rank-categories">
-                  <div className="coin-rank">Rank #{coin.coingecko_rank}</div>
+                  <div className="coin-rank">Rank #{coin?.market_cap_rank}</div>
                   {coin.categories?.[0] ? (
                     <div className="coin-categories">
                       {coin.categories?.[0]}
@@ -309,7 +356,7 @@ const CoinPage = () => {
 
                 datasets: [
                   {
-                    data: historicalData.map((coin, i) => coin[1]),
+                    data: historicalData.map((coin) => coin[1]),
                     label: "24hr Price in USD",
                     borderColor: "#F7A528",
                   },
@@ -371,10 +418,6 @@ const CoinPage = () => {
                 <div className="coin-stats-value">
                   $ {coin.market_data?.ath.usd.toLocaleString()}
                 </div>
-              </div>
-              <div className="coin-stats-list">
-                <div className="coin-stats-title">Market Cap Rank</div>
-                <div className="coin-stats-value">#{coin?.market_cap_rank}</div>
               </div>
             </div>
           </div>

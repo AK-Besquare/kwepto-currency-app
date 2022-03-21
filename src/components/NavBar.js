@@ -10,9 +10,17 @@ import { Link } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import FilterCoinList from "./FilterCoinList";
 
-const NavBar = ({ currency, setCurrency }) => {
+const NavBar = ({ currency, setCurrency, setOrder }) => {
   const [data, setData] = useState([]);
   const [toggleMenu, setToggleMenu] = useState(false);
+
+  // const changeOrder = () => {
+  //   setOrder("volume_desc");
+  // };
+
+  // const changeDefaultOrder = () => {
+  //   setOrder("market_cap_desc");
+  // };
 
   const toggleNav = () => {
     setToggleMenu(!toggleMenu);
@@ -48,6 +56,9 @@ const NavBar = ({ currency, setCurrency }) => {
         <ul className="links">
           <Link to="/currencies">
             <li>Currencies</li>
+          </Link>
+          <Link to="/discover">
+            <li>Discover</li>
           </Link>
           <Link to="/exchanges">
             <li>Exchanges</li>
